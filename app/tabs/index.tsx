@@ -1,11 +1,22 @@
 import { Stack } from 'expo-router';
-import { View } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
+
+import events from '../../assets/events.json';
+
+import { EventCard } from '~/components/EventCard';
 
 export default function Home() {
   return (
     <>
       <Stack.Screen options={{ title: 'Tab One' }} />
-      <View></View>
+      <SafeAreaView>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={events}
+          renderItem={({ item }) => <EventCard event={item} />}
+          keyExtractor={(item) => item.id}
+        />
+      </SafeAreaView>
     </>
   );
 }
