@@ -19,7 +19,7 @@ export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       <Pressable className="m-3 gap-3 border-b-[1px] border-gray-200 pb-3">
         <View className="flex-row">
           <View className="flex-1 gap-2">
-            <Text className="text-lg font-semibold uppercase text-stone-900">
+            <Text className="text-lg font-semibold uppercase text-amber-950">
               {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}
             </Text>
             <Text className="line-clamp-2 text-xl font-bold">{event.title}</Text>
