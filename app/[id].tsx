@@ -1,12 +1,55 @@
 import dayjs from 'dayjs';
 import { useLocalSearchParams, Stack } from 'expo-router';
-import { Text, View, Image, Pressable } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
 
-import events from '~/assets/events.json';
+import { useAuth } from '~/contexts/AuthProvider';
+import { supabase } from '~/utils/supabase';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
-  const event = events.find((e) => e.id === id);
+
+  const [event, setEvent] = useState<Event | null>(null);
+  const [attendance, setAttendance] = useState(null); // Fixed here
+  const [loading, setLoading] = useState(false);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    fetchEvent();
+  }, [id]);
+
+  const fetchEvent = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from('events').select('*').eq('id', id).single();
+    setEvent(data);
+
+    const { data: attendanceData } = await supabase
+      .from('attendance')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('event_id', id)
+      .single();
+    setAttendance(attendanceData);
+    console.log(attendanceData);
+
+    setLoading(false);
+  };
+
+  const joinEvent = async () => {
+    const { data } = await supabase
+      .from('attendance')
+      .insert({ user_id: user.id, event_id: event.id })
+      .select()
+      .single();
+    console.log(data);
+
+    setAttendance(data);
+  };
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
   if (!event) return <Text>Event not found</Text>;
   return (
@@ -14,17 +57,22 @@ export default function EventPage() {
       <Stack.Screen
         options={{ title: 'Event', headerBackTitleVisible: false, headerTintColor: 'black' }}
       />
-      <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image }} />
+      <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image_uri }} />
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}
       </Text>
       <Text className="line-clamp-2 text-lg">{event.description}</Text>
+
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t-2 border-gray-400 p-3 pb-10">
         <Text className="text-xl font-semibold">Free</Text>
-        <Pressable className="rounded-lg bg-red-400 p-4 px-8">
-          <Text className="text-lg font-bold text-white">join and RSVP</Text>
-        </Pressable>
+        {attendance ? (
+          <Text className="p-4 px-8 font-semibold text-green-500">You are attendent</Text>
+        ) : (
+          <Pressable className="rounded-lg bg-red-400 p-4 px-8" onPress={() => joinEvent()}>
+            <Text className="text-lg font-bold text-white">join and RSVP</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );

@@ -20,7 +20,6 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  console.log(loading);
 
   async function signInWithEmail() {
     setLoading(true);

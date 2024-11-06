@@ -10,7 +10,7 @@ export type Event = {
   description: string;
   datetime: string;
   location: string;
-  image: string;
+  image_uri: string;
 };
 
 export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
@@ -26,7 +26,7 @@ export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
             <Text className="text-gray-500">{event.location}</Text>
           </View>
-          <Image className="aspect-video w-2/5 rounded-xl" source={{ uri: event.image }} />
+          <Image className="aspect-video w-2/5 rounded-xl" source={{ uri: event.image_uri }} />
         </View>
         <View className="flex-row gap-3">
           <Text className="mr-auto text-gray-500">16 going</Text>
