@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
 
+import { EventIn } from '~/components/EventCard';
 import { useAuth } from '~/contexts/AuthProvider';
 import { supabase } from '~/utils/supabase';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
 
-  const [event, setEvent] = useState<Event | null>(null);
+  const [event, setEvent] = useState<EventIn | null>(null);
   const [attendance, setAttendance] = useState(null); // Fixed here
   const [loading, setLoading] = useState(false);
 
@@ -21,17 +22,16 @@ export default function EventPage() {
 
   const fetchEvent = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('events').select('*').eq('id', id).single();
+    const { data } = await supabase.from('events').select('*').eq('id', id).single();
     setEvent(data);
 
     const { data: attendanceData } = await supabase
       .from('attendance')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', user?.id)
       .eq('event_id', id)
       .single();
     setAttendance(attendanceData);
-    console.log(attendanceData);
 
     setLoading(false);
   };
@@ -39,10 +39,9 @@ export default function EventPage() {
   const joinEvent = async () => {
     const { data } = await supabase
       .from('attendance')
-      .insert({ user_id: user.id, event_id: event.id })
+      .insert({ user_id: user?.id, event_id: event?.id })
       .select()
       .single();
-    console.log(data);
 
     setAttendance(data);
   };
@@ -63,6 +62,9 @@ export default function EventPage() {
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}
       </Text>
       <Text className="line-clamp-2 text-lg">{event.description}</Text>
+      <Link href={`/event/${event.id}/attendance`} className="line-clamp-2 text-lg">
+        view attendance
+      </Link>
 
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t-2 border-gray-400 p-3 pb-10">
         <Text className="text-xl font-semibold">Free</Text>

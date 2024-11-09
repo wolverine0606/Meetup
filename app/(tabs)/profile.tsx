@@ -1,9 +1,8 @@
-import { Session } from '@supabase/supabase-js';
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Text, Pressable, TextInput, View } from 'react-native';
 
-import { useAuth } from '~/contexts/AuthProvider';
+import { AuthContextData, useAuth } from '~/contexts/AuthProvider';
 import { supabase } from '~/utils/supabase';
 
 export default function Home() {
@@ -12,7 +11,7 @@ export default function Home() {
   const [website, setWebsite] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
 
-  const session: Session = useAuth();
+  const session: AuthContextData = useAuth();
 
   useEffect(() => {
     if (session) getProfile();
@@ -86,7 +85,7 @@ export default function Home() {
       <TextInput
         editable={false}
         className="rounded-md border border-gray-200 p-3 text-gray-600"
-        value={session.user.email}
+        value={session.user?.email}
         autoCapitalize="none"
       />
 

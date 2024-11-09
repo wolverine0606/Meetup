@@ -1,12 +1,21 @@
-import { Session } from '@supabase/supabase-js';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { Session, User } from '@supabase/supabase-js';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 
 import { supabase } from '~/utils/supabase';
+export interface AuthContextData {
+  session: Session | null;
+  user: User | null;
+  isAuth: boolean;
+}
 
-const AuthContext = createContext({});
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-export default function AuthProvider({ children }: any) {
+const AuthContext = createContext<AuthContextData | null>(null);
+
+export default function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -20,14 +29,21 @@ export default function AuthProvider({ children }: any) {
       setSession(session);
     });
   }, []);
+
   if (!isReady) {
     return <ActivityIndicator />;
   }
+
   return (
-    <AuthContext.Provider value={{ session, user: session?.user, isAuth: !!session?.user }}>
+    <AuthContext.Provider
+      value={{
+        session,
+        user: session?.user ?? null,
+        isAuth: !!session?.user,
+      }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextData => useContext(AuthContext)!;
