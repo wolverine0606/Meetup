@@ -58,7 +58,10 @@ export default function EventPage() {
   return (
     <View className="flex-1 gap-3 bg-white p-3">
       <Stack.Screen options={{ title: 'Event', headerBackTitleVisible: false }} />
-      <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image_uri || '' }} />
+      <Image
+        className="aspect-video w-full rounded-xl"
+        source={{ uri: event.image_uri || undefined }}
+      />
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}

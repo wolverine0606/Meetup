@@ -34,7 +34,7 @@ export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
           </View>
           <Image
             className="aspect-video w-2/5 rounded-xl"
-            source={{ uri: event.image_uri || '' }}
+            source={{ uri: event.image_uri || undefined }}
           />
         </View>
         <View className="flex-row gap-3">
