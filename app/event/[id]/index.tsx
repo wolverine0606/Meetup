@@ -3,14 +3,14 @@ import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
 
-import { EventIn } from '~/components/EventCard';
 import { useAuth } from '~/contexts/AuthProvider';
+import { EventType } from '~/types/event';
 import { supabase } from '~/utils/supabase';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
 
-  const [event, setEvent] = useState<EventIn | null>(null);
+  const [event, setEvent] = useState<EventType | null>(null);
   const [attendance, setAttendance] = useState(null); // Fixed here
   const [loading, setLoading] = useState(false);
 
@@ -53,9 +53,7 @@ export default function EventPage() {
   if (!event) return <Text>Event not found</Text>;
   return (
     <View className="flex-1 gap-3 bg-white p-3">
-      <Stack.Screen
-        options={{ title: 'Event', headerBackTitleVisible: false, headerTintColor: 'black' }}
-      />
+      <Stack.Screen options={{ title: 'Event', headerBackTitleVisible: false }} />
       <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image_uri }} />
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
@@ -63,7 +61,7 @@ export default function EventPage() {
       </Text>
       <Text className="line-clamp-2 text-lg">{event.description}</Text>
       <Link href={`/event/${event.id}/attendance`} className="line-clamp-2 text-lg">
-        view attendance
+        view attendees
       </Link>
 
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t-2 border-gray-400 p-3 pb-10">

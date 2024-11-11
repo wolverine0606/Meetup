@@ -1,8 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import dayjs from 'dayjs';
-import { Stack, useNavigation } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { showMessage } from 'react-native-flash-message';
 
@@ -19,7 +19,6 @@ export default function CreateEvent() {
   const [loading, setLoading] = useState(true);
 
   const { user } = useAuth();
-  const nav = useNavigation();
 
   const now = dayjs(date).format('ddd , D MMM · h:mm A');
 
@@ -34,16 +33,22 @@ export default function CreateEvent() {
   const createEvent = async () => {
     setLoading(true);
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('events')
       .insert([{ title, description, datetime: date, user_id: user?.id }])
-      .select();
+      .select()
+      .single();
 
-    setLoading(false);
+    if (error) {
+      Alert.alert(String(error));
+    }
+
     setDescription('');
     setTitle('');
+    setDate(new Date());
 
-    nav.goBack();
+    router.push(`/event/${data?.id}`);
+    setLoading(false);
 
     showMessage({
       message: 'Event created!!',

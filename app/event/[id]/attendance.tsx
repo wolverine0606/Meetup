@@ -2,16 +2,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
+import { Profile } from '~/types/user';
 import { supabase } from '~/utils/supabase';
-
-interface Profile {
-  id: string;
-  updated_at: string | null;
-  username: string | null;
-  full_name: string | null;
-  avatar_url: string | null;
-  website: string | null;
-}
 
 export default function EventAttendance() {
   const { id } = useLocalSearchParams();
@@ -28,9 +20,7 @@ export default function EventAttendance() {
 
   return (
     <View>
-      <Stack.Screen
-        options={{ title: 'Attendees', headerBackTitleVisible: false, headerTintColor: 'black' }}
-      />
+      <Stack.Screen options={{ title: 'Attendees', headerBackTitleVisible: false }} />
       <FlatList
         data={attendees}
         renderItem={({ item }) => (

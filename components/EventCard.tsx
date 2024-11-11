@@ -4,18 +4,10 @@ import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 
+import { EventType } from '~/types/event';
 import { supabase } from '~/utils/supabase';
 
-export type EventIn = {
-  id: string;
-  title: string;
-  description: string;
-  datetime: string;
-  location: string;
-  image_uri: string;
-};
-
-export const EventCard: React.FC<{ event: EventIn }> = ({ event }) => {
+export const EventCard: React.FC<{ event: EventType }> = ({ event }) => {
   const [joined, setJoined] = useState<number | null>(0);
   useEffect(() => {
     fetchNumberOfAttendees();
