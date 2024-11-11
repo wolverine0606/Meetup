@@ -1,15 +1,16 @@
 import { Stack } from 'expo-router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Text, Pressable, TextInput, View } from 'react-native';
 
 import { AuthContextData, useAuth } from '~/contexts/AuthProvider';
+import { User } from '~/types/db';
 import { supabase } from '~/utils/supabase';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState('');
-  const [website, setWebsite] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [username, setUsername] = useState<string | null>(null);
+  const [website, setWebsite] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const session: AuthContextData = useAuth();
 
@@ -49,20 +50,20 @@ export default function Home() {
     website,
     avatar_url,
   }: {
-    username: string;
-    website: string;
-    avatar_url: string;
+    username: string | null;
+    website: string | null;
+    avatar_url: string | null;
   }) {
     try {
       setLoading(true);
       if (!session?.user) throw new Error('No user on the session!');
 
-      const updates = {
+      const updates: User['Insert'] = {
         id: session?.user.id,
         username,
         website,
         avatar_url,
-        updated_at: new Date(),
+        updated_at: String(new Date()),
       };
 
       const { error } = await supabase.from('profiles').upsert(updates);
@@ -92,7 +93,7 @@ export default function Home() {
       <TextInput
         className="rounded-md border border-gray-200 p-3"
         onChangeText={(text) => setUsername(text)}
-        value={username}
+        value={username || ''}
         placeholder="username"
         autoComplete="name"
         autoCapitalize="none"
@@ -100,7 +101,7 @@ export default function Home() {
       <TextInput
         className="rounded-md border border-gray-200 p-3"
         onChangeText={(text) => setWebsite(text)}
-        value={website}
+        value={website || ''}
         placeholder="website"
         autoCapitalize="none"
       />

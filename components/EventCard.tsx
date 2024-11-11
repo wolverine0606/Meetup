@@ -14,7 +14,7 @@ export const EventCard: React.FC<{ event: EventType }> = ({ event }) => {
   }, [event]);
   const fetchNumberOfAttendees = async () => {
     const { count } = await supabase
-      .from('attendance')
+      .from('attendees')
       .select('*', { count: 'exact', head: true })
       .eq('event_id', event.id);
     setJoined(count);

@@ -35,10 +35,16 @@ export default function CreateEvent() {
 
     const { data, error } = await supabase
       .from('events')
-      .insert([{ title, description, datetime: date, user_id: user?.id }])
+      .insert([
+        {
+          title,
+          description,
+          datetime: date.toISOString(),
+          user_id: user?.id ?? null, // Set user_id to null if user.id is undefined
+        },
+      ])
       .select()
       .single();
-
     if (error) {
       Alert.alert(String(error));
     }

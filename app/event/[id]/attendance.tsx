@@ -2,18 +2,18 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
-import { Profile } from '~/types/user';
+import { Attendees } from '~/types/db';
 import { supabase } from '~/utils/supabase';
 
 export default function EventAttendance() {
   const { id } = useLocalSearchParams();
 
-  const [attendees, setAttendees] = useState<{ profiles: Profile }[] | null>(null);
+  const [attendees, setAttendees] = useState<Attendees['ProfileIncluded'][] | null>();
   useEffect(() => {
     fetchAttendees();
   }, [id]);
   const fetchAttendees = async () => {
-    const { data } = await supabase.from('attendance').select('*, profiles(*)').eq('event_id', id);
+    const { data } = await supabase.from('attendees').select('*, profiles(*)').eq('event_id', id);
 
     setAttendees(data);
   };
@@ -25,7 +25,7 @@ export default function EventAttendance() {
         data={attendees}
         renderItem={({ item }) => (
           <View className="p-3 ">
-            <Text className=" font-bold">{item.profiles.username || 'user'}</Text>
+            <Text className=" font-bold">{item.profiles?.username || 'user'}</Text>
           </View>
         )}
       />

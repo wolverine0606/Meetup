@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
+import { Text, View, Image, Pressable, ActivityIndicator, Alert } from 'react-native';
 
 import { useAuth } from '~/contexts/AuthProvider';
-import { EventType } from '~/types/event';
+import { Event, Attendees } from '~/types/db';
 import { supabase } from '~/utils/supabase';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
 
-  const [event, setEvent] = useState<EventType | null>(null);
-  const [attendance, setAttendance] = useState(null); // Fixed here
+  const [event, setEvent] = useState<Event | null>(null);
+  const [attendance, setAttendance] = useState<Attendees['Row'] | null>(null); // Fixed here
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
@@ -26,9 +26,9 @@ export default function EventPage() {
     setEvent(data);
 
     const { data: attendanceData } = await supabase
-      .from('attendance')
+      .from('attendees')
       .select('*')
-      .eq('user_id', user?.id)
+      .eq('user_id', user?.id || '')
       .eq('event_id', id)
       .single();
     setAttendance(attendanceData);
@@ -37,11 +37,15 @@ export default function EventPage() {
   };
 
   const joinEvent = async () => {
-    const { data } = await supabase
-      .from('attendance')
-      .insert({ user_id: user?.id, event_id: event?.id })
+    const { data, error } = await supabase
+      .from('attendees')
+      .insert({ user_id: user?.id || '', event_id: event?.id || 0 })
       .select()
       .single();
+    if (error) {
+      Alert.alert('');
+      return true;
+    }
 
     setAttendance(data);
   };
@@ -54,7 +58,7 @@ export default function EventPage() {
   return (
     <View className="flex-1 gap-3 bg-white p-3">
       <Stack.Screen options={{ title: 'Event', headerBackTitleVisible: false }} />
-      <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image_uri }} />
+      <Image className="aspect-video w-full rounded-xl" source={{ uri: event.image_uri || '' }} />
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}
