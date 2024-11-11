@@ -40,7 +40,7 @@ export default function CreateEvent() {
           title,
           description,
           datetime: date.toISOString(),
-          user_id: user?.id ?? null, // Set user_id to null if user.id is undefined
+          user_id: user?.id,
         },
       ])
       .select()
