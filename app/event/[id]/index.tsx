@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable, ActivityIndicator, Alert } from 'react-native';
+import SupaImage from '~/components/SupaImage';
 
 import { useAuth } from '~/contexts/AuthProvider';
 import { Event, Attendees } from '~/types/db';
@@ -58,10 +59,7 @@ export default function EventPage() {
   return (
     <View className="flex-1 gap-3 bg-white p-3">
       <Stack.Screen options={{ title: 'Event', headerBackTitleVisible: false }} />
-      <Image
-        className="aspect-video w-full rounded-xl"
-        source={{ uri: event.image_uri || undefined }}
-      />
+      <SupaImage path={event.image_uri} className="aspect-video w-full rounded-xl" />
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}

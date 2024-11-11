@@ -6,6 +6,7 @@ import { View, Text, Image, Pressable } from 'react-native';
 
 import { Event } from '~/types/db';
 import { supabase } from '~/utils/supabase';
+import SupaImage from './SupaImage';
 
 export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const [joined, setJoined] = useState<number | null>(0);
@@ -32,10 +33,7 @@ export const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
             <Text className="text-gray-500">{event.location}</Text>
           </View>
-          <Image
-            className="aspect-video w-2/5 rounded-xl"
-            source={{ uri: event.image_uri || undefined }}
-          />
+          <SupaImage path={event.image_uri || null} className="aspect-video w-2/5 rounded-xl" />
         </View>
         <View className="flex-row gap-3">
           <Text className="mr-auto text-gray-500">{joined} going</Text>

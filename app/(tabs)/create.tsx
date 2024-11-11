@@ -6,6 +6,7 @@ import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { showMessage } from 'react-native-flash-message';
 
+import Avatar from '~/components/Avatar';
 import { useAuth } from '~/contexts/AuthProvider';
 import { supabase } from '~/utils/supabase';
 
@@ -17,6 +18,8 @@ export default function CreateEvent() {
   const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
+
+  const [imageUrl, setImageUrl] = useState('');
 
   const { user } = useAuth();
 
@@ -41,6 +44,7 @@ export default function CreateEvent() {
           description,
           datetime: date.toISOString(),
           user_id: user?.id,
+          image_uri: imageUrl,
         },
       ])
       .select()
@@ -66,6 +70,13 @@ export default function CreateEvent() {
   return (
     <View className="flex-1 gap-3 bg-white p-5">
       <Stack.Screen options={{ headerTitle: 'New Event' }} />
+      <Avatar
+        size={200}
+        url={imageUrl}
+        onUpload={(url: string) => {
+          setImageUrl(url);
+        }}
+      />
       <TextInput
         value={title}
         onChangeText={(title) => setTitle(title)}
