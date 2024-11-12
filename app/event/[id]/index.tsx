@@ -59,7 +59,11 @@ export default function EventPage() {
   return (
     <View className="flex-1 gap-3 bg-white p-3">
       <Stack.Screen options={{ title: 'Event', headerBackTitleVisible: false }} />
-      <SupaImage path={event.image_uri} className="aspect-video w-full rounded-xl" />
+      {event.image_uri ? (
+        <SupaImage path={event.image_uri} className="aspect-video w-full rounded-xl" />
+      ) : (
+        <View className="aspect-video w-full rounded-xl bg-gray-200" />
+      )}
       <Text className="line-clamp-2 text-3xl font-bold">{event.title}</Text>
       <Text className="text-lg font-semibold uppercase text-amber-950">
         {dayjs(event.datetime).format('ddd , D MMM · h:mm A')}
