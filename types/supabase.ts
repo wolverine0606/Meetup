@@ -126,7 +126,25 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      nearby_events: {
+        Args: {
+          lat: number;
+          long: number;
+        };
+        Returns: {
+          id: number;
+          created_at: string;
+          title: string;
+          description: string;
+          datetime: string;
+          location: string;
+          image_uri: string;
+          user_id: string;
+          lat: number;
+          long: number;
+          dist_meters: number;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

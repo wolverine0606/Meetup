@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, Image, Pressable, ActivityIndicator, Alert } from 'react-native';
-import SupaImage from '~/components/SupaImage';
+import { Text, View, Pressable, ActivityIndicator, Alert } from 'react-native';
 
+import SupaImage from '~/components/SupaImage';
 import { useAuth } from '~/contexts/AuthProvider';
 import { Event, Attendees } from '~/types/db';
 import { supabase } from '~/utils/supabase';

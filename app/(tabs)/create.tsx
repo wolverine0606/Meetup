@@ -1,8 +1,9 @@
 import { Feather } from '@expo/vector-icons';
+import { PostgrestError } from '@supabase/supabase-js';
 import dayjs from 'dayjs';
 import { router, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { showMessage } from 'react-native-flash-message';
 
@@ -35,38 +36,52 @@ export default function CreateEvent() {
 
   const createEvent = async () => {
     setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .insert([
+          {
+            title,
+            description,
+            datetime: date.toISOString(),
+            user_id: user?.id,
+            image_uri: imageUrl,
+            location_point: 'POINT(2.1 41.3)',
+          },
+        ])
+        .select()
+        .single();
 
-    const { data, error } = await supabase
-      .from('events')
-      .insert([
-        {
-          title,
-          description,
-          datetime: date.toISOString(),
-          user_id: user?.id,
-          image_uri: imageUrl,
-        },
-      ])
-      .select()
-      .single();
-    if (error) {
-      Alert.alert(String(error));
+      if (error) {
+        throw error;
+      }
+
+      setDescription('');
+      setTitle('');
+      setDate(new Date());
+
+      router.push(`/event/${data?.id}`);
+
+      showMessage({
+        message: 'Event created!!',
+        backgroundColor: '#f87171',
+        type: 'success',
+        titleStyle: { textAlign: 'center', flex: 1, justifyContent: 'center' },
+      });
+    } catch (err) {
+      const error = err as PostgrestError;
+
+      showMessage({
+        message: error.message,
+        backgroundColor: '#f87171',
+        type: 'danger',
+        titleStyle: { textAlign: 'center', flex: 1, justifyContent: 'center' },
+      });
+    } finally {
+      setLoading(false);
     }
-
-    setDescription('');
-    setTitle('');
-    setDate(new Date());
-
-    router.push(`/event/${data?.id}`);
-    setLoading(false);
-
-    showMessage({
-      message: 'Event created!!',
-      backgroundColor: '#f87171',
-      type: 'success',
-      titleStyle: { textAlign: 'center', flex: 1, justifyContent: 'center' },
-    });
   };
+
   return (
     <View className="flex-1 gap-3 bg-white p-5">
       <Stack.Screen options={{ headerTitle: 'New Event' }} />
