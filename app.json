@@ -20,13 +20,15 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow MeetUp to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow MeetUp to use your location.",
+          "locationWhenInUsePermission": "Show current location on map."
         }
       ],
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoid29sdmVyMW4iLCJhIjoiY20zZnp6bWNzMDExczJoc21ocGh3NmVydCJ9.Ih4KVmfdb-yOBvCXaPmYmw"
+          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoid29sdmVyMW4iLCJhIjoiY20zZnp6bWNzMDExczJoc21ocGh3NmVydCJ9.Ih4KVmfdb-yOBvCXaPmYmw",
+          "RNMapboxMapsVersion": "11.0.0"
         }
       ]
     ],
