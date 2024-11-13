@@ -23,12 +23,10 @@ To run this project, ensure you have the following installed:
 
 ## Installation
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/meetup-app.git
-   cd Meetup
-   ```
+```bash
+git clone https://github.com/yourusername/meetup-app.git
+cd Meetup
+```
 
 ## Install dependencies
 
@@ -62,10 +60,8 @@ $ npx expo start --dev-client
 
 ## Environment Variables
 
-### **Ensure you have a .env file for any environment-specific variables**
+### **Ensure you have a .env file for these environment-specific variables:**
 
-### EXPO_PUBLIC_SUPABASE_URL=
-
-### EXPO_PUBLIC_SUPABASE_ANON_KEY=
-
-### EXPO_PUBLIC_MAPBOX_TOKEN =
+EXPO_PUBLIC_SUPABASE_URL=
+EXPO_PUBLIC_SUPABASE_ANON_KEY=
+EXPO_PUBLIC_MAPBOX_TOKEN =
