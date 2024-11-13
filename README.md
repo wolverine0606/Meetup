@@ -58,8 +58,6 @@ $ npx expo run android
 $ npx expo start --dev-client
 ```
 
-## Environment Variables
-
 ## **Ensure you have a .env file for these environment-specific variables:**
 
 ```bash
