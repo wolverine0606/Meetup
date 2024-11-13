@@ -3,10 +3,11 @@ import { PostgrestError } from '@supabase/supabase-js';
 import dayjs from 'dayjs';
 import { router, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { showMessage } from 'react-native-flash-message';
 
+import AddressAutocomplete from '~/components/AdressAutocomplete';
 import Avatar from '~/components/Avatar';
 import { useAuth } from '~/contexts/AuthProvider';
 import { supabase } from '~/utils/supabase';
@@ -21,6 +22,7 @@ export default function CreateEvent() {
   const [loading, setLoading] = useState(true);
 
   const [imageUrl, setImageUrl] = useState('');
+  const [location, setLocation] = useState(null);
 
   const { user } = useAuth();
 
@@ -36,6 +38,9 @@ export default function CreateEvent() {
 
   const createEvent = async () => {
     setLoading(true);
+
+    const long = location?.features[0].geometry.coordinates[0];
+    const lat = location?.features[0].geometry.coordinates[1];
     try {
       const { data, error } = await supabase
         .from('events')
@@ -46,7 +51,8 @@ export default function CreateEvent() {
             datetime: date.toISOString(),
             user_id: user?.id,
             image_uri: imageUrl,
-            location_point: 'POINT(2.1 41.3)',
+            location: location?.features[0].properties.name,
+            location_point: `POINT(${long} ${lat})`,
           },
         ])
         .select()
@@ -83,59 +89,63 @@ export default function CreateEvent() {
   };
 
   return (
-    <View className="flex-1 gap-3 bg-white p-5">
-      <Stack.Screen options={{ headerTitle: 'New Event' }} />
-      <Avatar
-        size={200}
-        url={imageUrl}
-        onUpload={(url: string) => {
-          setImageUrl(url);
-        }}
-      />
-      <TextInput
-        value={title}
-        onChangeText={(title) => setTitle(title)}
-        className="rounded-md border border-gray-200 p-3"
-        placeholder="Title"
-        autoCapitalize="none"
-      />
-      <TextInput
-        value={description}
-        onChangeText={(descr) => setDescription(descr)}
-        className=" min-h-32 rounded-md border border-gray-200 p-3"
-        placeholder="Description"
-        multiline
-        numberOfLines={3}
-        autoCapitalize="none"
-      />
-      <Pressable
-        className=" flex-row items-center justify-between rounded-md border border-gray-200 pr-3"
-        onPress={() => setOpen(true)}>
-        <Text className="flex-1  p-3">{now}</Text>
-        <Feather name="chevron-down" size={24} color="gray" />
-      </Pressable>
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        theme="dark"
-        minimumDate={new Date()}
-        minuteInterval={15}
-        onConfirm={(date) => {
-          setDate(date);
-          setOpen(false);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-      <Pressable
-        style={{ opacity: loading ? 0.7 : 1, backgroundColor: loading ? '#fee2e2' : '#f87171' }}
-        disabled={loading}
-        onPress={() => createEvent()}
-        className=" mt-auto items-center rounded-lg bg-red-400 p-3 px-8">
-        <Text className="text-lg font-bold text-white  ">Create event</Text>
-      </Pressable>
-    </View>
+    <ScrollView contentContainerClassName=" flex-grow" className="flex-grow bg-white">
+      <View className="flex-1 gap-3 bg-white p-5">
+        <Stack.Screen options={{ headerTitle: 'New Event' }} />
+        <Avatar
+          size={200}
+          url={imageUrl}
+          onUpload={(url: string) => {
+            setImageUrl(url);
+          }}
+        />
+        <TextInput
+          value={title}
+          onChangeText={(title) => setTitle(title)}
+          className="rounded-md border border-gray-200 p-3"
+          placeholder="Title"
+          autoCapitalize="none"
+        />
+        <TextInput
+          value={description}
+          onChangeText={(descr) => setDescription(descr)}
+          className=" min-h-32 rounded-md border border-gray-200 p-3"
+          placeholder="Description"
+          multiline
+          numberOfLines={3}
+          autoCapitalize="none"
+        />
+        <Pressable
+          className=" flex-row items-center justify-between rounded-md border border-gray-200 pr-3"
+          onPress={() => setOpen(true)}>
+          <Text className="flex-1  p-3">{now}</Text>
+          <Feather name="chevron-down" size={24} color="gray" />
+        </Pressable>
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          theme="dark"
+          minimumDate={new Date()}
+          minuteInterval={15}
+          onConfirm={(date) => {
+            setDate(date);
+            setOpen(false);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <AddressAutocomplete onSelected={(location: any) => setLocation(location)} />
+
+        <Pressable
+          style={{ opacity: loading ? 0.7 : 1, backgroundColor: loading ? '#fee2e2' : '#f87171' }}
+          disabled={loading}
+          onPress={() => createEvent()}
+          className=" mt-auto items-center rounded-lg bg-red-400 p-3 px-8">
+          <Text className="text-lg font-bold text-white  ">Create event</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 }
