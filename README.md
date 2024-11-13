@@ -61,7 +61,7 @@ $ npx expo start --dev-client
 ## **Ensure you have a .env file for these environment-specific variables:**
 
 ```bash
-$ EXPO_PUBLIC_SUPABASE_URL=
-$ EXPO_PUBLIC_SUPABASE_ANON_KEY=
-$ EXPO_PUBLIC_MAPBOX_TOKEN =
+ EXPO_PUBLIC_SUPABASE_URL=
+ EXPO_PUBLIC_SUPABASE_ANON_KEY=
+ EXPO_PUBLIC_MAPBOX_TOKEN =
 ```
