@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
+import { defaultImages } from '~/assets/defaultImages';
 import { supabase } from '~/utils/supabase';
 
 type SupaImageProps = {
@@ -10,6 +11,7 @@ type SupaImageProps = {
 
 export default function SupaImage({ path, className }: SupaImageProps) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
   useEffect(() => {
     if (path) downloadImage(path);
   }, [path]);
@@ -32,5 +34,10 @@ export default function SupaImage({ path, className }: SupaImageProps) {
       }
     }
   }
-  return <Image className={className} source={{ uri: avatarUrl || undefined }} />;
+  return (
+    <Image
+      className={className}
+      source={avatarUrl ? { uri: avatarUrl || undefined } : defaultImages.default_avatar}
+    />
+  );
 }

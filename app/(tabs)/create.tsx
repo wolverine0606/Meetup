@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { showMessage } from 'react-native-flash-message';
+import { defaultImages } from '~/assets/defaultImages';
 
 import AddressAutocomplete from '~/components/AdressAutocomplete';
 import Avatar from '~/components/Avatar';
@@ -91,7 +92,7 @@ export default function CreateEvent() {
   return (
     <ScrollView contentContainerClassName=" flex-grow" className="flex-grow bg-white">
       <View className="flex-1 gap-3 bg-white p-5">
-        <Stack.Screen options={{ headerTitle: 'New Event' }} />
+        <Stack.Screen options={{ headerTitle: 'New Event', presentation: 'modal' }} />
         <Avatar
           size={200}
           url={imageUrl}

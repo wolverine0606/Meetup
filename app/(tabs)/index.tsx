@@ -1,5 +1,22 @@
-import { Redirect } from 'expo-router';
+import { Stack } from 'expo-router';
+import { FlatList, SafeAreaView } from 'react-native';
 
-export default function () {
-  return <Redirect href="/home" />;
+import { EventCard } from '~/components/EventCard';
+import { useNearbyEvents } from '~/hooks/useNearbyEvents';
+
+export default function Home() {
+  const { events } = useNearbyEvents();
+  return (
+    <>
+      <Stack.Screen />
+      <SafeAreaView className=" flex-1 bg-white">
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={events}
+          renderItem={({ item }) => <EventCard event={item} />}
+          keyExtractor={(item) => String(item.id)}
+        />
+      </SafeAreaView>
+    </>
+  );
 }

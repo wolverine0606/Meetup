@@ -7,7 +7,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/default_avatar.png"
     },
     "plugins": [
       "expo-router",
@@ -27,8 +27,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoid29sdmVyMW4iLCJhIjoiY20zZnp6bWNzMDExczJoc21ocGh3NmVydCJ9.Ih4KVmfdb-yOBvCXaPmYmw",
-          "RNMapboxMapsVersion": "11.0.0"
+          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoid29sdmVyMW4iLCJhIjoiY20zZnp6bWNzMDExczJoc21ocGh3NmVydCJ9.Ih4KVmfdb-yOBvCXaPmYmw"
         }
       ]
     ],
@@ -37,10 +36,10 @@
       "tsconfigPaths": true
     },
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/default_avatar.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/default_avatar.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -51,7 +50,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/default_avatar.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.wolver1n10.Meetup"

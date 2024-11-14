@@ -2,6 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Alert, Image, Button } from 'react-native';
 
+import { defaultImages } from '~/assets/defaultImages';
 import { supabase } from '~/utils/supabase';
 
 interface Props {
@@ -90,15 +91,11 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
 
   return (
     <View className=" items-center justify-center">
-      {avatarUrl ? (
-        <Image
-          source={{ uri: avatarUrl }}
-          accessibilityLabel="Avatar"
-          style={[avatarSize, styles.avatar, styles.image]}
-        />
-      ) : (
-        <View style={[avatarSize, styles.avatar, styles.noImage]} />
-      )}
+      <Image
+        source={avatarUrl ? { uri: avatarUrl } : defaultImages.logo}
+        accessibilityLabel="Avatar"
+        style={[avatarSize, styles.avatar, styles.image]}
+      />
       <View>
         <Button
           title={uploading ? 'Uploading ...' : 'Upload'}
